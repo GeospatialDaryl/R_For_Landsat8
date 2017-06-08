@@ -12,7 +12,6 @@ shinyUI(fluidPage(
                 sidebarPanel(
                         
                         
-                        
                         numericInput("numeric", "How Many Random Numbers Should be Plotted?", 
                                      value = 1000, min = 1, max = 1000, step = 1),
                         dateRangeInput("dateBegEnd", "Beginning and Ending Dates",
@@ -32,8 +31,14 @@ shinyUI(fluidPage(
                         #checkboxInput("show_title", "Show/Hide Title")
                 ),
                 mainPanel(
-                        h3("Graph of Random Points")
-                        #plotOutput("plot1")
+                        
+                        fluidRow(h3("Graph of Random Points"),
+                                
+                                column(12,
+                                       dataTableOutput("table")
+                                )
+                
+                        )
                 )
         )
 ))
