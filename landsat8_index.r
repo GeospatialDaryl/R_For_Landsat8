@@ -68,3 +68,4 @@ filter.Cloud <- function(inDS, cloudCutoff ){
                 filter(CloudCover < cloudCutoff)
 }
 
+
