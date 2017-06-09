@@ -5,8 +5,12 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 
-download.file("http://landsat-pds.s3.amazonaws.com/scene_list.gz", "scene_list.gz")
-gunzip("scene_list.gz")
+csv_name <- "scene_list"
+
+if (! file.exists( csv_name )){
+        download.file("http://landsat-pds.s3.amazonaws.com/scene_list.gz", "scene_list.gz")
+        gunzip("scene_list.gz")
+}
 
 scene_list <- read_csv("X:/_02_Repos/Repos/5030_R_Landsat/scene_list")
 #View(scene_list)

@@ -76,21 +76,65 @@ shinyServer(function(input, output) {
                         filter(mean_lat < lat_max) %>%
                         filter(mean_lat > lat_min) %>%
                         filter(mean_lon < lon_max) %>%
-                        filter(mean_lon > lon_min)
+                        filter(mean_lon > lon_min) -> outDS
+                return(outDS)
         }
         
-        filter.Cloud <- function(inDS, cloudCutoff ){
+        filter.Cloud <- function(inDS, cloudCutoffL, cloudCutoffH ){
                 inDS %>%
-                        filter(CloudCover < cloudCutoff)
+                        filter(cloudCover < cloudCutoffH) -> outDS
+                outDS %>%
+                        filter(cloudCover > cloudCutoffL) -> outDS
+                return(outDS)
         }
         
+        
+        filter.Cloud.H <- function(inDS, cloudCutoffH ){
+                inDS %>%
+                        filter(cloudCover < cloudCutoffH) -> outDS
+                return(outDS)
+        }
+        
+        filter.Cloud.L <- function(inDS, cloudCutoffL ){
+                #inDS1 %>%
+                #        filter(dS$cloudCover > cloudCutoffL) -> outDS
+                
+                filter(inDS, cloudCover > as.double(cloudCutoffL)) -> outDS
+                return(outDS)
+        }
+        
+        
+        filter.StartDate <- function(inDS, startDate){
+                inDS %>%
+                        filter(acquisitionDate > ymd(startDate)) -> outDS
+                return(outDS)
+                
+        }
+        
+        filter.EndDate <- function(inDS, endDate){
+                inDS %>%
+                        filter(acquisitionDate < ymd(endDate)) -> outDS
+                return(outDS)
+        }
         
         ###  prepare table for ouput
         
         
+                
         
-        output$table <- renderDataTable(
-        iris
-        )
+        output$table <- renderDataTable({
+                startD <- input$dateBegEnd[1]
+                endD   <- input$dateBegEnd[2]
+                ccLow  <- as.double(input$pcCC[1])
+                ccHi   <- as.double(input$pcCC[2])
+                
+                dOut <- dS
+                dOut <- filter.StartDate(dOut, startD )
+                dOut <- filter.EndDate(dOut, endD)
+                dOut <- filter.Cloud.L(dOut, ccLow)
+                dOut <- filter.Cloud.H(dOut, ccHi)
+                
+                dOut
+        })
 })
 
