@@ -58,6 +58,35 @@ shinyServer(function(input, output) {
         dS$mean_lat <- ( dS$max_lat + dS$min_lat )/2.
         dS$mean_lon <- ( dS$max_lon + dS$min_lon )/2.
         
+        ###   Filtering Functions
+        
+        filter.RowPath <- function(inPath, inRow){
+                dim(dRP)[1] -> nRows
+                for( i in 1:nRows ){
+                        thisRow = dRP[[i,1]]
+                        thisCol = dRP[[i,2]]
+                        #print( c(thisRow,thisCol))
+                        print(filter(dS, dS$row == thisRow))
+                        
+                }
+        }
+        
+        filter.LatLon <- function(inDS, lon_min, lon_max, lat_min, lat_max ){
+                inDS %>% 
+                        filter(mean_lat < lat_max) %>%
+                        filter(mean_lat > lat_min) %>%
+                        filter(mean_lon < lon_max) %>%
+                        filter(mean_lon > lon_min)
+        }
+        
+        filter.Cloud <- function(inDS, cloudCutoff ){
+                inDS %>%
+                        filter(CloudCover < cloudCutoff)
+        }
+        
+        
+        ###  prepare table for ouput
+        
         
         
         output$table <- renderDataTable(
@@ -65,19 +94,3 @@ shinyServer(function(input, output) {
         )
 })
 
-# 
-# output$plot1 <- renderPlot({
-#         set.seed(2016-05-25)
-#         number_of_points <- input$numeric
-#         minD <- input$dateBegEnd[1]
-#         maxD <- input$dateBegEnd[2]
-#         #minY <- input$sliderY[1]
-#         #maxY <- input$sliderY[2]
-#         dataX <- runif(number_of_points, minX, maxX)
-#         dataY <- runif(number_of_points, minY, maxY)
-#         #xlab <- ifelse(input$show_xlab, "X Axis", "")
-#         #ylab <- ifelse(input$show_ylab, "Y Axis", "")
-#         main <- ifelse(input$show_title, "Title", "")
-#         #plot(dataX, dataY, xlab = xlab, ylab = ylab, main = main,
-#         #     xlim = c(-100, 100), ylim = c(-100, 100))
-        
