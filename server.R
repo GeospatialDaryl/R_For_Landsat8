@@ -59,17 +59,45 @@ shinyServer(function(input, output) {
         dS$mean_lon <- ( dS$max_lon + dS$min_lon )/2.
         
         ###   Filtering Functions
-        
-        filter.RowPath <- function(inPath, inRow){
+
+        filter.Row <- function(inDS){
                 dim(dRP)[1] -> nRows
+                outDS <- inDS[0,]
                 for( i in 1:nRows ){
+                        DS <- inDS
                         thisRow = dRP[[i,1]]
-                        thisCol = dRP[[i,2]]
-                        #print( c(thisRow,thisCol))
-                        print(filter(dS, dS$row == thisRow))
+                        #thisPath = dRP[[i,2]]
+                        DS %>%
+                                filter(row == thisRow) -> thisDS
+                        rbind(outDS, thisDS) -> outDS
                         
-                }
+                }        
+                return(outDS)
+                
         }
+        
+        
+        filter.Path <- function(inDS){
+                outDS <- inDS[0, ]
+                vPaths <- distinct(dRP[,2])
+                
+                nRows <- dim(vPaths)[1]
+                
+                for( i in 1:nRows ){
+                        DS <- inDS
+                        print(outDS)
+                        thisPath = dRP[[i,2]]
+                        #print(vPaths)
+                        #thisPath = vPaths[i]
+                        print(thisPath)
+                        DS %>%
+                                filter(thisPath %in% path) -> thisDS
+                        rbind(outDS, thisDS) -> outDS
+                }        
+                return(outDS)
+                
+        }
+
         
         filter.LatLon <- function(inDS, lon_min, lon_max, lat_min, lat_max ){
                 inDS %>% 
@@ -77,14 +105,6 @@ shinyServer(function(input, output) {
                         filter(mean_lat > lat_min) %>%
                         filter(mean_lon < lon_max) %>%
                         filter(mean_lon > lon_min) -> outDS
-                return(outDS)
-        }
-        
-        filter.Cloud <- function(inDS, cloudCutoffL, cloudCutoffH ){
-                inDS %>%
-                        filter(cloudCover < cloudCutoffH) -> outDS
-                outDS %>%
-                        filter(cloudCover > cloudCutoffL) -> outDS
                 return(outDS)
         }
         
@@ -118,23 +138,29 @@ shinyServer(function(input, output) {
         }
         
         ###  prepare table for ouput
-        
-        
-                
+
         
         output$table <- renderDataTable({
+                # UI Inputs
                 startD <- input$dateBegEnd[1]
                 endD   <- input$dateBegEnd[2]
                 ccLow  <- as.double(input$pcCC[1])
                 ccHi   <- as.double(input$pcCC[2])
-                
+                rpFilt  <- input$rpF
+
+                # table logic
                 dOut <- dS
                 dOut <- filter.StartDate(dOut, startD )
                 dOut <- filter.EndDate(dOut, endD)
                 dOut <- filter.Cloud.L(dOut, ccLow)
                 dOut <- filter.Cloud.H(dOut, ccHi)
+                if(rpFilt){ 
+                        dOut <- filter.Row(dOut)
+                }
                 
                 dOut
-        })
+                
+        }, options = list(pageLength = 12)
+        )
 })
 

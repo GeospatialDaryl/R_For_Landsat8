@@ -24,8 +24,9 @@ shinyUI(fluidPage(
                                        startview = "month"),
                         
                         sliderInput("pcCC", "Percent Cloud Cover:",
-                                    0, 100, value = c(0, 20))#,
-                        #checkboxInput("", "Show/Hide X Axis Label", value = TRUE),
+                                    0, 100, value = c(0, 20)),
+                        checkboxInput("rpF", "Row/Path Filter", value = TRUE)#,
+                        #checkboxInput("pF", "Path Filter", value = TRUE)
                         
                         #sliderInput("sliderY", "Pick Minimum and Maximum Y Values",
                         #            -100, 100, value = c(-50, 50))
@@ -38,6 +39,7 @@ shinyUI(fluidPage(
                                 
                                 column(12,
                                        dataTableOutput("table")
+                                                       
                                 )
                 
                         )
