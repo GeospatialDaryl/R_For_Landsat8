@@ -1,0 +1,11 @@
+name: 5030_R_Landsat
+title: 5030_R_Landsat
+account: geospatialdaryl
+server: shinyapps.io
+appId: 190608
+bundleId: 874303
+url: https://geospatialdaryl.shinyapps.io/5030_R_Landsat/
+when: 1497910132.84675
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: CopyOfserver.R|landsat8_index.r|scene_list.gz|EarthEngine_Landsat8/app.R

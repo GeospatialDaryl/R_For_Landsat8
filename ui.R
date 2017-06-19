@@ -10,7 +10,7 @@ shinyUI(fluidPage(
         sidebarLayout(
                 
                 sidebarPanel(
-                        
+                        titlePanel("Wait for the data to load.   Then set the date range, cloud cover filter, and filter by Path/Row"),
                         
                         #numericInput("numeric", "How Many Random Numbers Should be Plotted?", 
                         #             value = 1000, min = 1, max = 1000, step = 1),
@@ -35,7 +35,7 @@ shinyUI(fluidPage(
                 ),
                 mainPanel(
                         
-                        fluidRow(h3("Graph of Random Points"),
+                        fluidRow(h3("Filtered Landsat8"),
                                 
                                 column(12,
                                        dataTableOutput("table")

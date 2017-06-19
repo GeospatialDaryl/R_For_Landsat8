@@ -1,0 +1,56 @@
+Landsat 8 - Scene Lookup
+========================================================
+author: Daryl Van Dyke
+date: 2017-06-19        
+autosize: true
+
+Purpose
+========================================================
+
+This project allows the dynamic query of Landsat 8 data scenes.
+
+- The list is *live* - it updates itself when run.
+- The scene list includes a date range filter, as well as
+- a filter for cloud cover (max and min).
+
+The Main Stick
+========================================================
+
+```{r, echo = TRUE}
+#install.packages("R.utils")
+library(R.utils)
+library(readr)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+```
+```{r, echo = FALSE}
+csv_name <- "scene_list"
+
+if (! file.exists( csv_name )){
+        download.file("http://landsat-pds.s3.amazonaws.com/scene_list.gz", "scene_list.gz")
+        gunzip("scene_list.gz")
+}
+
+scene_list <- read_csv("scene_list")
+#View(scene_list)
+
+dS <- tbl_df(scene_list)
+rm(scene_list)
+
+```
+========================================================
+
+```{r}
+summary( dS[,1:4] )
+```
+
+My Hyperlinks!
+========================================================
+
+The Github Location:
+https://github.com/GeospatialDaryl/5030_R_Landsat
+
+The Shiny App on Shinyapps.io
+https://geospatialdaryl.shinyapps.io/5030_R_Landsat/
+

@@ -12,7 +12,7 @@ if (! file.exists( csv_name )){
         gunzip("scene_list.gz")
 }
 
-scene_list <- read_csv("X:/_02_Repos/Repos/5030_R_Landsat/scene_list")
+scene_list <- read_csv("scene_list")
 #View(scene_list)
 
 dS <- tbl_df(scene_list)
